@@ -1,13 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Static Consumer</title>
-  <script type="text/javascript" src="assets/webcomponents-loader.js"></script>
-  <script type="module" src="http://localhost:8000/custom-polymer-element.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>custom-polymer-element demo</title>
+    <script id="webcomponents-loader" src="assets/webcomponents-loader.js"></script>
+    <script id="esm-amd-loader" src="assets/esm-amd-loader.min.js"></script>
+    <script>
+        (function(){
+            function insertOneNodeAfterAnotherNode(oneNode, anotherNode) {
+                anotherNode.parentNode.insertBefore(oneNode, anotherNode.nextSibling);
+            }
+            if ('registerElement' in document
+                && 'import' in document.createElement('link')
+                && 'content' in document.createElement('template')) {
+                console.debug('platform is good!');
+                var script = document.createElement('script');
+                script.src = 'http://localhost:8000/custom-polymer-element.js';
+                script.type = 'module';
+                insertOneNodeAfterAnotherNode(script, document.getElementById('webcomponents-loader'));
+            } else {
+                console.debug('polyfill the platform');
+                var defineScript = document.createElement('script');
+                defineScript.innerHTML = 'define([\'http://localhost:8000/custom-polymer-element.js\']);';
+                insertOneNodeAfterAnotherNode(defineScript, document.getElementById('esm-amd-loader'));
+            }
+        })();
+    </script>
 </head>
 <body>
-  <custom-polymer-element></custom-polymer-element>
+<custom-polymer-element></custom-polymer-element>
 </body>
 </html>
